@@ -8,6 +8,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import zeinhijazi.com.pmeas.effects.Effect;
+import zeinhijazi.com.pmeas.effects.EffectsDefaults;
 import zeinhijazi.com.pmeas.util.EnabledListAdapter;
 
 public class EffectsActivity extends AppCompatActivity {
@@ -19,17 +20,15 @@ public class EffectsActivity extends AppCompatActivity {
     Button addNewEffectButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_effects);
 
-        ArrayList<String> param = new ArrayList<>();
-        param.add("Feedback");
-        param.add("Slope");
-
         effects = new ArrayList<>();
-        effects.add(new Effect("Distortion", param, new ArrayList<Float>()));
-        effects.add(new Effect("Delay", new ArrayList<String>(), new ArrayList<Float>()));
+        effects.add(new Effect(EffectsDefaults.EffectTypes.DISTORTION));
+        effects.add(new Effect(EffectsDefaults.EffectTypes.DELAY));
+        effects.add(new Effect(EffectsDefaults.EffectTypes.CHORUS));
 
         listAdapter = new EnabledListAdapter(this, effects);
 
