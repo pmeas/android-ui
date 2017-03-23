@@ -1,5 +1,6 @@
 package zeinhijazi.com.pmeas.effects;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,15 @@ public class Effect {
             }
         }
         return false;
+    }
+
+    public String getDisplayName()
+    {
+        return type.displayName;
+    }
+    public Collection<String> getParamNames()
+    {
+        return params.keySet();
     }
 
     int getSimpleParam(String paramJsonName)

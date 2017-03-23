@@ -42,7 +42,7 @@ public class EffectsDefaults {
             this.defaultValue = defaultValue;
         }
     }
-    static enum EffectTypes {
+    public static enum EffectTypes {
         CHORUS("Chorus", "chorus",
                 new SimpleEffectDefaults("Balance", "balance",
                         0, 100, 50),
