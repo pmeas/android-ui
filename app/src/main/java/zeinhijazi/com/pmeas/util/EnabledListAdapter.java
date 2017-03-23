@@ -58,7 +58,6 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             for(String param: params) {
                 TextView paramName = new TextView(context);
                 paramName.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                paramName.
                 paramName.setText(param);
                 relativeLayout.addView(paramName);
             }

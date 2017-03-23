@@ -2,9 +2,7 @@ package zeinhijazi.com.pmeas;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,9 +12,11 @@ import zeinhijazi.com.pmeas.util.EnabledListAdapter;
 
 public class EffectsActivity extends AppCompatActivity {
 
-    ListView effectsList;
+    ListView effectsListView;
     EnabledListAdapter listAdapter;
     ArrayList<Effect> effects;
+
+    Button addNewEffectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class EffectsActivity extends AppCompatActivity {
 
         listAdapter = new EnabledListAdapter(this, effects);
 
-        effectsList = (ListView)findViewById(R.id.enabledEffectsList);
-        effectsList.setAdapter(listAdapter);
+        effectsListView = (ListView)findViewById(R.id.enabledEffectsList);
+        effectsListView.setAdapter(listAdapter);
     }
 }
