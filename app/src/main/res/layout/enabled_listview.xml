@@ -6,8 +6,67 @@
     <TextView
         android:id="@+id/enabled_effect_name"
         android:layout_width="wrap_content"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/firstParamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/enabled_effect_name"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 
+    <SeekBar
+        android:id="@+id/firstParamSlider"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/firstParamName"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/secondParamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstParamSlider"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <SeekBar
+        android:id="@+id/secondParamSlider"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/secondParamName"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/thirdParamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/secondParamSlider"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <SeekBar
+        android:id="@+id/thirdParamSlider"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/thirdParamName"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/fourthParamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/thirdParamSlider"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <SeekBar
+        android:id="@+id/fourthParamSlider"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/fourthParamName"
+        android:visibility="gone"/>
 
 </RelativeLayout>
