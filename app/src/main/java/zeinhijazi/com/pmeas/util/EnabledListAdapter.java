@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
     private ArrayList<Effect> enabledEffects;
 
-    private RelativeLayout relativeLayout;
     private LayoutInflater layoutInflater;
 
 
@@ -47,26 +47,52 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         if(view == null) {
             view = layoutInflater.inflate(R.layout.enabled_listview, parent, false);
 
-            relativeLayout = (RelativeLayout)view.findViewById(R.id.layout_id);
-
             Effect currentEffect = enabledEffects.get(position);
+            ArrayList<String> params = currentEffect.getParameters();
 
             TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
-            Collection<String> params = currentEffect.getParamNames();
-            effectName.setText(currentEffect.getDisplayName());
+            effectName.setText(currentEffect.getEffectName());
 
-            for(String param: params) {
-                TextView paramName = new TextView(context);
-                paramName.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                paramName.setText(param);
-                relativeLayout.addView(paramName);
+            System.out.println("ARRAY ADAPTER EFFECT NAME RECEIVED: " + currentEffect.getEffectName());
+
+            //TODO: Make only one variable and just change the assignment into different ViewbyIds
+            switch (params.size()) {
+                case 4:
+                    TextView fourthParam = (TextView)view.findViewById(R.id.fourthParamName);
+                    fourthParam.setText(params.get(3));
+                    fourthParam.setVisibility(View.VISIBLE);
+
+                    SeekBar fourthBar = (SeekBar)view.findViewById(R.id.fourthParamSlider);
+                    fourthBar.setVisibility(View.VISIBLE);
+                case 3:
+                    TextView thirdParam = (TextView)view.findViewById(R.id.thirdParamName);
+                    thirdParam.setText(params.get(2));
+                    thirdParam.setVisibility(View.VISIBLE);
+
+                    SeekBar thirdBar = (SeekBar)view.findViewById(R.id.thirdParamSlider);
+                    thirdBar.setVisibility(View.VISIBLE);
+                case 2:
+                    // do stuff
+                    TextView secondParam = (TextView)view.findViewById(R.id.secondParamName);
+                    secondParam.setText(params.get(1));
+                    secondParam.setVisibility(View.VISIBLE);
+
+                    SeekBar secondBar = (SeekBar)view.findViewById(R.id.secondParamSlider);
+                    secondBar.setVisibility(View.VISIBLE);
+                case 1:
+                    // do stuff
+                    TextView firstParam = (TextView)view.findViewById(R.id.firstParamName);
+                    firstParam.setText(params.get(0));
+                    firstParam.setVisibility(View.VISIBLE);
+
+                    SeekBar firstBar = (SeekBar)view.findViewById(R.id.firstParamSlider);
+                    firstBar.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
             }
 
 
-
-//            Button btnTag = new Button(context);
-//            btnTag.setText("Lmao");
-//            relativeLayout.addView(btnTag);
 
         }
 
