@@ -11,13 +11,11 @@ import zeinhijazi.com.pmeas.effects.Effect;
 import zeinhijazi.com.pmeas.effects.EffectsDefaults;
 import zeinhijazi.com.pmeas.util.EnabledListAdapter;
 
-public class EffectsActivity extends AppCompatActivity {
-
+public class EffectsActivity extends AppCompatActivity
+{
     ListView effectsListView;
     EnabledListAdapter listAdapter;
     ArrayList<Effect> effects;
-
-    Button addNewEffectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
