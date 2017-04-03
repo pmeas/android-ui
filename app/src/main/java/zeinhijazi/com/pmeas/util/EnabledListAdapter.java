@@ -48,12 +48,12 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             view = layoutInflater.inflate(R.layout.enabled_listview, parent, false);
 
             Effect currentEffect = enabledEffects.get(position);
-            ArrayList<String> params = currentEffect.getParameters();
+            Collection<String> params = currentEffect.getParamNames();
 
             TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
-            effectName.setText(currentEffect.getEffectName());
+            effectName.setText(currentEffect.getDisplayName());
 
-            System.out.println("ARRAY ADAPTER EFFECT NAME RECEIVED: " + currentEffect.getEffectName());
+
 
             //TODO: Make only one variable and just change the assignment into different ViewbyIds
             switch (params.size()) {
