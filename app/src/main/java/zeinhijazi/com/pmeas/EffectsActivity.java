@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +17,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import zeinhijazi.com.pmeas.effects.Effect;
+import zeinhijazi.com.pmeas.effects.EffectsDefaults;
 import zeinhijazi.com.pmeas.util.EnabledListAdapter;
 
-public class EffectsActivity extends AppCompatActivity {
-
-    ListView effectsList;
+public class EffectsActivity extends AppCompatActivity
+{
+    ListView effectsListView;
     EnabledListAdapter listAdapter;
     ArrayList<Effect> effects;
 
@@ -29,12 +31,16 @@ public class EffectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_effects);
 
+        ArrayList<String> param = new ArrayList<>();
+        param.add("Feedback");
+        param.add("Slope");
+
         effects = new ArrayList<>();
 
         listAdapter = new EnabledListAdapter(this, effects);
 
-        effectsList = (ListView)findViewById(R.id.enabledEffectsList);
-        effectsList.setAdapter(listAdapter);
+        effectsListView = (ListView)findViewById(R.id.enabledEffectsList);
+        effectsListView.setAdapter(listAdapter);
     }
 
     @Override
@@ -58,64 +64,42 @@ public class EffectsActivity extends AppCompatActivity {
                 builder.setItems(effectsNames, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        System.out.print("ADD EFFECT CLICK INDEX: " + which +", EFFECT NAME: " + effectsNames[which]);
-                        ArrayList<String> effectParameters = new ArrayList<>();
                         switch (which) {
                             case 0:
                                 // stuff
-                                effectParameters.add("Distortion");
-                                effectParameters.add("Tone");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.DISTORTION));
                                 break;
                             case 1:
                                 // stuff
-                                effectParameters.add("Delay Time");
-                                effectParameters.add("Feedback");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.DELAY));
                                 break;
                             case 2:
                                 // stuff
-                                effectParameters.add("Balance");
-                                effectParameters.add("Tone");
-                                effectParameters.add("Delay");
-                                effectParameters.add("Room Size");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.REVERB));
                                 break;
                             case 3:
                                 // stuff
-                                effectParameters.add("Balance");
-                                effectParameters.add("Rate");
-                                effectParameters.add("Depth");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.CHORUS));
                                 break;
                             case 4:
                                 // stuff
-                                effectParameters.add("Pitch");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.FREQUENCY_SHIFT));
                                 break;
                             case 5:
                                 // stuff
-                                effectParameters.add("Feedback");
-                                effectParameters.add("Shift");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.HARMONIZER));
                                 break;
                             case 6:
                                 // stuff
-                                effectParameters.add("Depth");
-                                effectParameters.add("Frequency");
-                                effectParameters.add("Feedback");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.FLANGER));
                                 break;
                             case 7:
                                 // stuff
-                                effectParameters.add("Frequency");
-                                effectParameters.add("Spread");
-                                effectParameters.add("Feedback");
-                                effectParameters.add("Num");
+                                effects.add(new Effect(EffectsDefaults.EffectTypes.PHASER));
                                 break;
                             default:
                                 break;
                         }
-
-                        // TODO: Instead of going through the listarray for all values, you can just
-                        // TODO: store the created effects in some global variable that we can then read.
-                        // TODO: But then there is issue with looking at what values are... so maybe listview only way.
-                        // TODO: Also we maybe dont need the FLoats arraylist in an effect if we can read raw seekbar values.
-                        String selectedEffect = effectsNames[which].toString();
-                        effects.add(new Effect(selectedEffect, effectParameters, new ArrayList<Float>()));
 
                         listAdapter.notifyDataSetChanged();
 

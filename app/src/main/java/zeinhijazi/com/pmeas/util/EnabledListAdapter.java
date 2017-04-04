@@ -6,15 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import zeinhijazi.com.pmeas.R;
 import zeinhijazi.com.pmeas.effects.Effect;
+import zeinhijazi.com.pmeas.effects.EffectsDefaults;
 
 /**
  * Created by zhijazi on 3/11/17.
@@ -47,49 +49,27 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         if(view == null) {
             view = layoutInflater.inflate(R.layout.enabled_listview, parent, false);
 
+            LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.layout_id);
+
             Effect currentEffect = enabledEffects.get(position);
-            ArrayList<String> params = currentEffect.getParameters();
+            EffectsDefaults.EffectDefaults[] params = currentEffect.getEffectParamNames();
 
             TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
-            effectName.setText(currentEffect.getEffectName());
+            effectName.setText(currentEffect.getDisplayName());
 
-            System.out.println("ARRAY ADAPTER EFFECT NAME RECEIVED: " + currentEffect.getEffectName());
+            // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
+            for(EffectsDefaults.EffectDefaults effectParam: params) {
+                TextView paramaterName = new TextView(context);
+                paramaterName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                paramaterName.setText(effectParam.getName());
 
-            //TODO: Make only one variable and just change the assignment into different ViewbyIds
-            switch (params.size()) {
-                case 4:
-                    TextView fourthParam = (TextView)view.findViewById(R.id.fourthParamName);
-                    fourthParam.setText(params.get(3));
-                    fourthParam.setVisibility(View.VISIBLE);
 
-                    SeekBar fourthBar = (SeekBar)view.findViewById(R.id.fourthParamSlider);
-                    fourthBar.setVisibility(View.VISIBLE);
-                case 3:
-                    TextView thirdParam = (TextView)view.findViewById(R.id.thirdParamName);
-                    thirdParam.setText(params.get(2));
-                    thirdParam.setVisibility(View.VISIBLE);
+                SeekBar parameterSlider = new SeekBar(context);
+                parameterSlider.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                    SeekBar thirdBar = (SeekBar)view.findViewById(R.id.thirdParamSlider);
-                    thirdBar.setVisibility(View.VISIBLE);
-                case 2:
-                    // do stuff
-                    TextView secondParam = (TextView)view.findViewById(R.id.secondParamName);
-                    secondParam.setText(params.get(1));
-                    secondParam.setVisibility(View.VISIBLE);
+                linearLayout.addView(paramaterName);
+                linearLayout.addView(parameterSlider);
 
-                    SeekBar secondBar = (SeekBar)view.findViewById(R.id.secondParamSlider);
-                    secondBar.setVisibility(View.VISIBLE);
-                case 1:
-                    // do stuff
-                    TextView firstParam = (TextView)view.findViewById(R.id.firstParamName);
-                    firstParam.setText(params.get(0));
-                    firstParam.setVisibility(View.VISIBLE);
-
-                    SeekBar firstBar = (SeekBar)view.findViewById(R.id.firstParamSlider);
-                    firstBar.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    break;
             }
 
 
