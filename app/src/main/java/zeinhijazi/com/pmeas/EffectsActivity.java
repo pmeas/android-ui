@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,10 +15,17 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import zeinhijazi.com.pmeas.effects.Effect;
 import zeinhijazi.com.pmeas.effects.EffectsDefaults;
+import zeinhijazi.com.pmeas.util.Bridge;
 import zeinhijazi.com.pmeas.util.EnabledListAdapter;
 
 public class EffectsActivity extends AppCompatActivity
@@ -25,6 +33,8 @@ public class EffectsActivity extends AppCompatActivity
     ListView effectsListView;
     EnabledListAdapter listAdapter;
     ArrayList<Effect> effects;
+
+    Bridge bridge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,14 @@ public class EffectsActivity extends AppCompatActivity
 
         effectsListView = (ListView)findViewById(R.id.enabledEffectsList);
         effectsListView.setAdapter(listAdapter);
+
+        try {
+            bridge = new Bridge();
+        } catch (IOException e) {
+            Log.e("Effects Activity", "IO Exception making bridge: " + e.getMessage());
+        }
+
+        bridge.start();
     }
 
     @Override
@@ -55,6 +73,7 @@ public class EffectsActivity extends AppCompatActivity
         switch(item.getItemId()) {
             case R.id.action_send:
                 Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
+                new Bridge.BridgeAsync().execute("Sup");
                 return true;
             case R.id.action_add:
                 Toast.makeText(this, "Add Button Selected", Toast.LENGTH_SHORT).show();
