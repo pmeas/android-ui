@@ -5,7 +5,7 @@ package zeinhijazi.com.pmeas.effects;
  */
 
 public class EffectsDefaults {
-    static abstract class EffectDefaults
+    public static abstract class EffectDefaults
     {
         final String name;
         final String jsonName;
@@ -16,6 +16,18 @@ public class EffectsDefaults {
             this.name = name;
             this.jsonName = jsonName;
             this.isComplex = isComplex;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public String getJsonName() {
+            return this.jsonName;
+        }
+
+        public boolean isComplex() {
+            return this.isComplex;
         }
     }
     static class SimpleEffectDefaults
@@ -29,6 +41,18 @@ public class EffectsDefaults {
             this.max = max;
             this.defaultValue = defaultValue;
         }
+
+        public int getMin() {
+            return this.min;
+        }
+
+        public int getMax() {
+            return this.max;
+        }
+
+        public int getDefaultValue() {
+            return this.defaultValue;
+        }
     }
     static class ComplexEffectDefaults
             extends EffectDefaults
@@ -40,6 +64,18 @@ public class EffectsDefaults {
             this.min = min;
             this.max = max;
             this.defaultValue = defaultValue;
+        }
+
+        public int getMin() {
+            return this.min;
+        }
+
+        public int getMax() {
+            return this.max;
+        }
+
+        public int getDefaultValue() {
+            return this.defaultValue;
         }
     }
     public static enum EffectTypes {
