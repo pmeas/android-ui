@@ -42,6 +42,7 @@ public class Effect {
     {
         return type.displayName;
     }
+    public EffectsDefaults.EffectDefaults[] getEffectParamNames() { return type.defaults; }
     public Collection<String> getParamNames()
     {
         return params.keySet();
