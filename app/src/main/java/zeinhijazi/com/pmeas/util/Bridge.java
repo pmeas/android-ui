@@ -20,6 +20,7 @@ import java.net.SocketException;
  * Created by zhijazi on 4/4/17.
  */
 
+// TODO: Perform this at some start screen then making tcpSocket/streams public static so others can access them.
 public class Bridge extends Thread{
 
     private DatagramSocket udpSocket;
@@ -73,6 +74,7 @@ public class Bridge extends Thread{
         inStream = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
     }
 
+    // TODO: Move this to the effects activity to be able to change UI elements.
     public static class BridgeAsync extends AsyncTask<String, Void, String> {
 
         @Override
@@ -81,8 +83,10 @@ public class Bridge extends Thread{
             String result = null;
 
             try {
-                Bridge.outputStream.writeBytes(message);
-//                result = Bridge.inStream.readLine();
+                if(!(outputStream == null) && !(inStream == null)) {
+                    Bridge.outputStream.writeBytes(message);
+                    result = Bridge.inStream.readLine();
+                }
             } catch(IOException e) {
                 Log.e("BRIDGE", "Caught IOException on doInBg: " + e.getMessage());
             }
