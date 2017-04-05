@@ -73,7 +73,7 @@ public class EffectsActivity extends AppCompatActivity
         switch(item.getItemId()) {
             case R.id.action_send:
                 Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
-                new Bridge.BridgeAsync().execute("Sup");
+                new Bridge.BridgeAsync().execute("{\"intent\": \"EFFECT\", \"0\":{\"name\": \"delay\", \"delay\": 1, \"feedback\": 0.5}}");
                 return true;
             case R.id.action_add:
                 Toast.makeText(this, "Add Button Selected", Toast.LENGTH_SHORT).show();

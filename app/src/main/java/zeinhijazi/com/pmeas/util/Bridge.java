@@ -69,8 +69,8 @@ public class Bridge extends Thread{
 
     private void connectTCP(InetAddress addr, int port) throws IOException {
         tcpSocket = new Socket(addr, port);
-        DataOutputStream outputStream = new DataOutputStream(tcpSocket.getOutputStream());
-        BufferedReader inStream = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
+        outputStream = new DataOutputStream(tcpSocket.getOutputStream());
+        inStream = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
     }
 
     public static class BridgeAsync extends AsyncTask<String, Void, String> {
