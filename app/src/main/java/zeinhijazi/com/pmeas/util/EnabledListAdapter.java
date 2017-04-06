@@ -65,7 +65,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             effectName.setId(latestId++);
 
             // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
-            for(EffectsDefaults.EffectDefaults effectParam: params) {
+            for(final EffectsDefaults.EffectDefaults effectParam: params) {
 
                 TextView paramaterName = new TextView(context);
                 paramaterName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -97,7 +97,15 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
                 parameterSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        sliderValue.setText(String.valueOf(progress));
+                        int seekBarMin = 0;
+                        if(effectParam.isComplex()) {
+                            seekBarMin = ((EffectsDefaults.ComplexEffectDefaults)effectParam).getMin();
+                        } else {
+                            seekBarMin = ((EffectsDefaults.SimpleEffectDefaults)effectParam).getMin();
+
+                        }
+                        float clampedProgress = ((float)(progress + seekBarMin))/effectParam.getDivideFactor();
+                        sliderValue.setText(String.valueOf(clampedProgress));
                     }
 
                     @Override
