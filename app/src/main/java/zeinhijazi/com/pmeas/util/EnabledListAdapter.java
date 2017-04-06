@@ -56,8 +56,12 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
             int latestId = 0;
 
+            TextView latestIdValue = new TextView(context);
+            latestIdValue.setVisibility(View.GONE);
+            latestIdValue.setId(latestId++);
+
             TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
-            effectName.setText(currentEffect.getDisplayName());
+            effectName.setText(currentEffect.getJsonName()); //TODO: This should be getDisplayName() but changed to json name for easy of use for now.
             effectName.setId(latestId++);
 
             // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
@@ -114,7 +118,8 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             }
 
 
-
+            latestIdValue.setText(String.valueOf(latestId));
+            linearLayout.addView(latestIdValue);
         }
 
         return view;

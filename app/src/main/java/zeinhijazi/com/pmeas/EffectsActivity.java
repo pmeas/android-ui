@@ -145,29 +145,35 @@ public class EffectsActivity extends AppCompatActivity
 
         try {
             JSONObject effectJSON = new JSONObject();
+            JSONObject effectData = new JSONObject();
+
             effectJSON.put("intent", "EFFECT");
 
-            Map<String, Object> effectData = new HashMap<>();
-            effectData.put("name", "delay");
-            effectData.put("delay", 1);
-            effectData.put("feedback", 0.5);
+            View effectsListViewItem;
+            for(int i = 0; i < effectsListView.getCount(); i++) {
+                effectData = new JSONObject();
+                effectsListViewItem = effectsListView.getChildAt(i);
 
-            effectJSON.put("0", effectData);
+                String numEffects = ((TextView)effectsListViewItem.findViewById(0)).getText().toString();
+                String effectName = ((TextView)effectsListViewItem.findViewById(1)).getText().toString();
+
+                effectData.put("name", effectName);
+
+                for(int j = 2; j < Integer.parseInt(numEffects); j+=2) {
+                    String paramName = ((TextView)effectsListViewItem.findViewById(j)).getText().toString();
+                    float paramValue = Float.parseFloat(((TextView)effectsListViewItem.findViewById(j+1)).getText().toString());
+                    effectData.put(paramName, paramValue);
+                }
+
+                effectJSON.put(String.valueOf(i), effectData);
+            }
 
             System.out.println(effectJSON.toString());
+            new Bridge.BridgeAsync().execute(effectJSON.toString());
+
 
         } catch(JSONException e) {
             Log.e("JSON", "Json exception: " + e.getMessage());
         }
-
-
-//        View effectsListViewItem;
-//        effectsListViewItem = effectsListView.getChildAt(0);
-//        String name = ((TextView)effectsListViewItem.findViewById(4)).getText().toString();
-//        Toast.makeText(this, "ID Name: " + name, Toast.LENGTH_SHORT).show();
-
-
-
-//        new Bridge.BridgeAsync().execute("{\"intent\": \"EFFECT\", \"0\":{\"name\": \"delay\", \"delay\": 1, \"feedback\": 0.5}}");
     }
 }
