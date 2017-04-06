@@ -54,21 +54,62 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             Effect currentEffect = enabledEffects.get(position);
             EffectsDefaults.EffectDefaults[] params = currentEffect.getEffectParamNames();
 
+            int latestId = 0;
+
             TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
             effectName.setText(currentEffect.getDisplayName());
+            effectName.setId(latestId++);
 
             // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
             for(EffectsDefaults.EffectDefaults effectParam: params) {
+
                 TextView paramaterName = new TextView(context);
                 paramaterName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                paramaterName.setText(effectParam.getName());
+                paramaterName.setText(effectParam.getJsonName()); //TODO: This should be getName() but this requires some (large?) change so just use Json name for now.
+                paramaterName.setId(latestId++);
 
 
                 SeekBar parameterSlider = new SeekBar(context);
                 parameterSlider.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+                final TextView sliderValue = new TextView(context);
+                sliderValue.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                sliderValue.setId(latestId++);
+
+                int seekbarMax = 100;
+                int seekbarDefProgress = 0;
+                if(effectParam.isComplex()) {
+                    seekbarMax = ((EffectsDefaults.ComplexEffectDefaults)effectParam).getMax();
+                    seekbarDefProgress = ((EffectsDefaults.ComplexEffectDefaults)effectParam).getDefaultValue();
+                } else {
+                    seekbarMax = ((EffectsDefaults.SimpleEffectDefaults)effectParam).getMax();
+                    seekbarDefProgress = ((EffectsDefaults.SimpleEffectDefaults)effectParam).getDefaultValue();
+
+                }
+
+                parameterSlider.setMax(seekbarMax);
+                parameterSlider.setProgress(seekbarDefProgress);
+
+                parameterSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        sliderValue.setText(String.valueOf(progress));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+
                 linearLayout.addView(paramaterName);
                 linearLayout.addView(parameterSlider);
+                linearLayout.addView(sliderValue);
 
             }
 

@@ -30,7 +30,7 @@ public class EffectsDefaults {
             return this.isComplex;
         }
     }
-    static class SimpleEffectDefaults
+    public static class SimpleEffectDefaults
             extends EffectDefaults
     {
         int min, max, defaultValue;
@@ -54,7 +54,7 @@ public class EffectsDefaults {
             return this.defaultValue;
         }
     }
-    static class ComplexEffectDefaults
+    public static class ComplexEffectDefaults
             extends EffectDefaults
     {
         int min, max, defaultValue;

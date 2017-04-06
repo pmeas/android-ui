@@ -1,6 +1,7 @@
 package zeinhijazi.com.pmeas;
 
 import android.content.DialogInterface;
+import android.os.Debug;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -22,6 +27,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 import zeinhijazi.com.pmeas.effects.Effect;
 import zeinhijazi.com.pmeas.effects.EffectsDefaults;
@@ -72,8 +80,8 @@ public class EffectsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_send:
-                Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
-                new Bridge.BridgeAsync().execute("{\"intent\": \"EFFECT\", \"0\":{\"name\": \"delay\", \"delay\": 1, \"feedback\": 0.5}}");
+//                Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
+                sendEffects();
                 return true;
             case R.id.action_add:
                 Toast.makeText(this, "Add Button Selected", Toast.LENGTH_SHORT).show();
@@ -131,5 +139,35 @@ public class EffectsActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void sendEffects() {
+
+        try {
+            JSONObject effectJSON = new JSONObject();
+            effectJSON.put("intent", "EFFECT");
+
+            Map<String, Object> effectData = new HashMap<>();
+            effectData.put("name", "delay");
+            effectData.put("delay", 1);
+            effectData.put("feedback", 0.5);
+
+            effectJSON.put("0", effectData);
+
+            System.out.println(effectJSON.toString());
+
+        } catch(JSONException e) {
+            Log.e("JSON", "Json exception: " + e.getMessage());
+        }
+
+
+//        View effectsListViewItem;
+//        effectsListViewItem = effectsListView.getChildAt(0);
+//        String name = ((TextView)effectsListViewItem.findViewById(4)).getText().toString();
+//        Toast.makeText(this, "ID Name: " + name, Toast.LENGTH_SHORT).show();
+
+
+
+//        new Bridge.BridgeAsync().execute("{\"intent\": \"EFFECT\", \"0\":{\"name\": \"delay\", \"delay\": 1, \"feedback\": 0.5}}");
     }
 }
