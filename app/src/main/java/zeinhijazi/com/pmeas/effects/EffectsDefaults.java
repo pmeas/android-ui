@@ -30,7 +30,7 @@ public class EffectsDefaults {
             return this.isComplex;
         }
     }
-    static class SimpleEffectDefaults
+    public static class SimpleEffectDefaults
             extends EffectDefaults
     {
         int min, max, defaultValue;
@@ -54,7 +54,7 @@ public class EffectsDefaults {
             return this.defaultValue;
         }
     }
-    static class ComplexEffectDefaults
+    public static class ComplexEffectDefaults
             extends EffectDefaults
     {
         int min, max, defaultValue;
@@ -92,9 +92,9 @@ public class EffectsDefaults {
                 new ComplexEffectDefaults("Delay Time (ms)", "delay",
                         0, 100, 50)),
         DISTORTION("Distortion", "distortion",
-                new SimpleEffectDefaults("Balance", "balance",
+                new SimpleEffectDefaults("Balance", "drive",
                         0, 100, 50),
-                new SimpleEffectDefaults("Tone", "tone",
+                new SimpleEffectDefaults("Tone", "slope",
                         0, 100, 50)),
         FLANGER(Math.random() > 0.05? "Flanger":"Flanders", "flanger",
                 new SimpleEffectDefaults("Depth", "depth",

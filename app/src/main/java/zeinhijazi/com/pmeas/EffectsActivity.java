@@ -1,6 +1,7 @@
 package zeinhijazi.com.pmeas;
 
 import android.content.DialogInterface;
+import android.os.Debug;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -22,6 +27,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 import zeinhijazi.com.pmeas.effects.Effect;
 import zeinhijazi.com.pmeas.effects.EffectsDefaults;
@@ -72,8 +80,8 @@ public class EffectsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_send:
-                Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
-                new Bridge.BridgeAsync().execute("{\"intent\": \"EFFECT\", \"0\":{\"name\": \"delay\", \"delay\": 1, \"feedback\": 0.5}}");
+//                Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
+                sendEffects();
                 return true;
             case R.id.action_add:
                 Toast.makeText(this, "Add Button Selected", Toast.LENGTH_SHORT).show();
@@ -130,6 +138,42 @@ public class EffectsActivity extends AppCompatActivity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void sendEffects() {
+
+        try {
+            JSONObject effectJSON = new JSONObject();
+            JSONObject effectData = new JSONObject();
+
+            effectJSON.put("intent", "EFFECT");
+
+            View effectsListViewItem;
+            for(int i = 0; i < effectsListView.getCount(); i++) {
+                effectData = new JSONObject();
+                effectsListViewItem = effectsListView.getChildAt(i);
+
+                String numEffects = ((TextView)effectsListViewItem.findViewById(0)).getText().toString();
+                String effectName = ((TextView)effectsListViewItem.findViewById(1)).getText().toString();
+
+                effectData.put("name", effectName);
+
+                for(int j = 2; j < Integer.parseInt(numEffects); j+=2) {
+                    String paramName = ((TextView)effectsListViewItem.findViewById(j)).getText().toString();
+                    float paramValue = Float.parseFloat(((TextView)effectsListViewItem.findViewById(j+1)).getText().toString());
+                    effectData.put(paramName, paramValue);
+                }
+
+                effectJSON.put(String.valueOf(i), effectData);
+            }
+
+            System.out.println(effectJSON.toString());
+            new Bridge.BridgeAsync().execute(effectJSON.toString());
+
+
+        } catch(JSONException e) {
+            Log.e("JSON", "Json exception: " + e.getMessage());
         }
     }
 }
