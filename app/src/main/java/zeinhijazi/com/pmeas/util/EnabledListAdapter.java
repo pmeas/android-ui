@@ -64,7 +64,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             effectName.setText(currentEffect.getDisplayName());
 
             TextView effectJsonName = new TextView(context);
-            effectJsonName.setText(currentEffect.getJsonName()); //TODO: This should be getDisplayName() but changed to json name for easy of use for now.
+            effectJsonName.setText(currentEffect.getJsonName());
             effectJsonName.setId(latestId++);
 
             // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
