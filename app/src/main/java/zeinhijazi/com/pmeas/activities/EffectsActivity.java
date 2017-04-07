@@ -1,6 +1,8 @@
-package zeinhijazi.com.pmeas;
+package zeinhijazi.com.pmeas.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Debug;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +33,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
+import zeinhijazi.com.pmeas.R;
 import zeinhijazi.com.pmeas.effects.Effect;
 import zeinhijazi.com.pmeas.effects.EffectsDefaults;
 import zeinhijazi.com.pmeas.util.Bridge;
@@ -61,12 +64,10 @@ public class EffectsActivity extends AppCompatActivity
         effectsListView.setAdapter(listAdapter);
 
         try {
-            bridge = new Bridge();
+            new Bridge().execute();
         } catch (IOException e) {
-            Log.e("Effects Activity", "IO Exception making bridge: " + e.getMessage());
+            Log.e("Effects Activity", "IO Exception creating bridge: " + e.getMessage());
         }
-
-        bridge.start();
     }
 
     @Override
@@ -155,6 +156,8 @@ public class EffectsActivity extends AppCompatActivity
                 effectsListViewItem = effectsListView.getChildAt(i);
 
                 String numEffects = ((TextView)effectsListViewItem.findViewById(0)).getText().toString();
+                /* Don't try to fix this line. It's not an actual error but a lint error because you
+                technically shouldn't do this but our view is dynamically added so you have to. */
                 String effectName = ((TextView)effectsListViewItem.findViewById(1)).getText().toString();
 
                 effectData.put("name", effectName);
@@ -169,11 +172,47 @@ public class EffectsActivity extends AppCompatActivity
             }
 
             System.out.println(effectJSON.toString());
-            new Bridge.BridgeAsync().execute(effectJSON.toString());
+            new BridgeAsync(this).execute(effectJSON.toString());
 
 
         } catch(JSONException e) {
             Log.e("JSON", "Json exception: " + e.getMessage());
+        }
+    }
+
+    public static class BridgeAsync extends AsyncTask<String, Void, String> {
+
+        Context context;
+
+        public BridgeAsync(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String message = params[0];
+            String result = null;
+
+            try {
+                if(!(Bridge.outputStream == null) && !(Bridge.inStream == null)) {
+                    Bridge.outputStream.writeBytes(message);
+                    result = Bridge.inStream.readLine();
+                } else {
+                }
+            } catch(IOException e) {
+                Log.e("BRIDGE", "Caught IOException on doInBg: " + e.getMessage());
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result == null) {
+                Toast.makeText(context, "Send Failed. Did you lose connection?", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
