@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="zeinhijazi.com.pmeas.EffectsActivity">
+    tools:context="zeinhijazi.com.pmeas.activities.EffectsActivity">
 
     <ListView
         android:id="@+id/enabledEffectsList"

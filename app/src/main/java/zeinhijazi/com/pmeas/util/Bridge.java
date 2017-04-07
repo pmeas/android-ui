@@ -15,13 +15,14 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by zhijazi on 4/4/17.
  */
 
 // TODO: Perform this at some start screen then making tcpSocket/streams public static so others can access them.
-public class Bridge extends Thread{
+public class Bridge extends AsyncTask<Void, Void, String>{
 
     private DatagramSocket udpSocket;
     private Socket tcpSocket;
@@ -35,24 +36,36 @@ public class Bridge extends Thread{
     public Bridge() throws IOException {
         udpSocket = new DatagramSocket();
         udpSocket.setBroadcast(true);
+        udpSocket.setSoTimeout(5000);
     }
 
     @Override
-    public void run() {
+    protected String doInBackground(Void... params) {
+
+        String result = "FAIL";
 
         try {
-            broadcastMessage(udpSocket);
-            InetAddress tcpAddr = receiveMessage(udpSocket);
-            connectTCP(tcpAddr, 10001);
+            broadcastMessage();
+
+            InetAddress tcpAddr = receiveMessage();
+            if(tcpAddr == null) {
+                System.out.println("Socket Timed Out");
+                return result;
+            }
+
+            if( connectTCP(tcpAddr, 10001) ) {
+                result = "Success";
+            }
         } catch (SocketException e) {
             Log.e("EffectsActivity", "SocketException caught: " + e.getMessage());
         } catch (IOException e) {
             Log.e("EffectsActivity", "IOException caught: " + e.getMessage());
         }
 
+        return result;
     }
 
-    private void broadcastMessage(DatagramSocket udpSocket) throws SocketException, IOException {
+    private void broadcastMessage() throws SocketException, IOException {
 
         byte[] broadcastMessage = "1".getBytes();
         InetAddress addr = InetAddress.getByName(ADDR);
@@ -60,39 +73,28 @@ public class Bridge extends Thread{
         udpSocket.send(sendPacket);
     }
 
-    private InetAddress receiveMessage(DatagramSocket udpSocket) throws IOException{
+    private InetAddress receiveMessage() throws IOException{
         byte[] receivedMessage = new byte[1024];
         DatagramPacket receivePacket = new DatagramPacket(receivedMessage, receivedMessage.length);
-        udpSocket.receive(receivePacket);
+        try {
+            udpSocket.receive(receivePacket);
+        } catch (SocketTimeoutException e) {
+            System.out.println("SOCKET TIMED OUT!");
+            return null;
+        }
         String portNum = new String(receivePacket.getData());
         return receivePacket.getAddress();
     }
 
-    private void connectTCP(InetAddress addr, int port) throws IOException {
+    private boolean connectTCP(InetAddress addr, int port) throws IOException {
         tcpSocket = new Socket(addr, port);
         outputStream = new DataOutputStream(tcpSocket.getOutputStream());
         inStream = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
+
+        return (outputStream != null) && (inStream != null);
     }
 
     // TODO: Move this to the effects activity to be able to change UI elements.
-    public static class BridgeAsync extends AsyncTask<String, Void, String> {
 
-        @Override
-        protected String doInBackground(String... params) {
-            String message = params[0];
-            String result = null;
-
-            try {
-                if(!(outputStream == null) && !(inStream == null)) {
-                    Bridge.outputStream.writeBytes(message);
-                    result = Bridge.inStream.readLine();
-                }
-            } catch(IOException e) {
-                Log.e("BRIDGE", "Caught IOException on doInBg: " + e.getMessage());
-            }
-
-            return result;
-        }
-    }
 
 }
