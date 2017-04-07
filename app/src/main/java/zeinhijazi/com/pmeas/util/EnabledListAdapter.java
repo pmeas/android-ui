@@ -61,16 +61,25 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             latestIdValue.setId(latestId++);
 
             TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
-            effectName.setText(currentEffect.getJsonName()); //TODO: This should be getDisplayName() but changed to json name for easy of use for now.
-            effectName.setId(latestId++);
+            effectName.setText(currentEffect.getDisplayName());
+
+            TextView effectJsonName = new TextView(context);
+            effectJsonName.setText(currentEffect.getJsonName()); //TODO: This should be getDisplayName() but changed to json name for easy of use for now.
+            effectJsonName.setId(latestId++);
 
             // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
             for(final EffectsDefaults.EffectDefaults effectParam: params) {
 
                 TextView paramaterName = new TextView(context);
                 paramaterName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                paramaterName.setText(effectParam.getJsonName()); //TODO: This should be getName() but this requires some (large?) change so just use Json name for now.
+
+                TextView displayParamName = new TextView(context);
+                displayParamName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                displayParamName.setText(effectParam.getName());
+
+                paramaterName.setText(effectParam.getJsonName());
                 paramaterName.setId(latestId++);
+
 
 
                 SeekBar parameterSlider = new SeekBar(context);
@@ -119,7 +128,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
                     }
                 });
 
-                linearLayout.addView(paramaterName);
+                linearLayout.addView(displayParamName);
                 linearLayout.addView(parameterSlider);
                 linearLayout.addView(sliderValue);
 
