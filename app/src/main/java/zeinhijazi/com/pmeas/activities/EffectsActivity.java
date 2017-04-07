@@ -197,7 +197,6 @@ public class EffectsActivity extends AppCompatActivity
                 if(!(Bridge.outputStream == null) && !(Bridge.inStream == null)) {
                     Bridge.outputStream.writeBytes(message);
                     result = Bridge.inStream.readLine();
-                } else {
                 }
             } catch(IOException e) {
                 Log.e("BRIDGE", "Caught IOException on doInBg: " + e.getMessage());
