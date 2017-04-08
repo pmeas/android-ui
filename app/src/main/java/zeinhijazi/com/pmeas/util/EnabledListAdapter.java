@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -48,6 +49,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
         if(view == null) {
             view = layoutInflater.inflate(R.layout.enabled_listview, parent, false);
+        }
 
             LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.layout_id);
 
@@ -73,16 +75,13 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
                 TextView paramaterName = new TextView(context);
                 paramaterName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                TextView displayParamName = new TextView(context);
-                displayParamName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                displayParamName.setText(effectParam.getName());
-
                 paramaterName.setText(effectParam.getJsonName());
                 paramaterName.setId(latestId++);
                 paramaterName.setVisibility(View.GONE);
 
-
+                TextView displayParamName = new TextView(context);
+                displayParamName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                displayParamName.setText(effectParam.getName());
 
                 SeekBar parameterSlider = new SeekBar(context);
                 parameterSlider.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -134,7 +133,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             latestIdValue.setText(String.valueOf(latestId));
             linearLayout.addView(latestIdValue);
             linearLayout.addView(effectJsonName);
-        }
+
 
         return view;
     }
