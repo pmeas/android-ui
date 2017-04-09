@@ -31,6 +31,8 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
     private LayoutInflater layoutInflater;
 
+    private EffectViewHolder viewHolder;
+
 
     public EnabledListAdapter(Context context, ArrayList<Effect> effects) {
         super(context, R.layout.enabled_listview, effects);
@@ -41,6 +43,10 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public static class EffectViewHolder {
+        Button removeBtn;
+    }
+
     @NonNull
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -49,9 +55,13 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
         if(view == null) {
             view = layoutInflater.inflate(R.layout.enabled_listview, parent, false);
-        }
+            viewHolder = new EffectViewHolder();
+            viewHolder.removeBtn = (Button)view.findViewById(R.id.removeEffect);
 
-            LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.layout_id);
+            view.setTag(viewHolder);
+
+            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.layout_id);
+
 
             Effect currentEffect = enabledEffects.get(position);
             EffectsDefaults.EffectDefaults[] params = currentEffect.getEffectParamNames();
@@ -62,7 +72,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             latestIdValue.setVisibility(View.GONE);
             latestIdValue.setId(latestId++);
 
-            TextView effectName = (TextView)view.findViewById(R.id.enabled_effect_name);
+            TextView effectName = (TextView) view.findViewById(R.id.enabled_effect_name);
             effectName.setText(currentEffect.getDisplayName());
 
             TextView effectJsonName = new TextView(context);
@@ -71,7 +81,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             effectJsonName.setVisibility(View.GONE);
 
             // TODO: Create separate layout parameters with actual parameters; i.e center seekbar + text, etc.
-            for(final EffectsDefaults.EffectDefaults effectParam: params) {
+            for (final EffectsDefaults.EffectDefaults effectParam : params) {
 
                 TextView paramaterName = new TextView(context);
                 paramaterName.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -92,12 +102,12 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
                 int seekbarMax = 100;
                 int seekbarDefProgress = 0;
-                if(effectParam.isComplex()) {
-                    seekbarMax = ((EffectsDefaults.ComplexEffectDefaults)effectParam).getMax();
-                    seekbarDefProgress = ((EffectsDefaults.ComplexEffectDefaults)effectParam).getDefaultValue();
+                if (effectParam.isComplex()) {
+                    seekbarMax = ((EffectsDefaults.ComplexEffectDefaults) effectParam).getMax();
+                    seekbarDefProgress = ((EffectsDefaults.ComplexEffectDefaults) effectParam).getDefaultValue();
                 } else {
-                    seekbarMax = ((EffectsDefaults.SimpleEffectDefaults)effectParam).getMax();
-                    seekbarDefProgress = ((EffectsDefaults.SimpleEffectDefaults)effectParam).getDefaultValue();
+                    seekbarMax = ((EffectsDefaults.SimpleEffectDefaults) effectParam).getMax();
+                    seekbarDefProgress = ((EffectsDefaults.SimpleEffectDefaults) effectParam).getDefaultValue();
                 }
 
                 parameterSlider.setMax(seekbarMax);
@@ -134,6 +144,18 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             linearLayout.addView(latestIdValue);
             linearLayout.addView(effectJsonName);
 
+        } else {
+            viewHolder = (EffectViewHolder)view.getTag();
+        }
+
+        viewHolder.removeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("I've been clicked");
+                remove(enabledEffects.get(position));
+                notifyDataSetChanged();
+            }
+        });
 
         return view;
     }
