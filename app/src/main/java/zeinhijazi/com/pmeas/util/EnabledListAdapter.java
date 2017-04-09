@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -31,11 +32,8 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
     private LayoutInflater layoutInflater;
 
-    private EffectViewHolder viewHolder;
-
-
     public EnabledListAdapter(Context context, ArrayList<Effect> effects) {
-        super(context, R.layout.enabled_listview, effects);
+        super(context, -1, -1, effects);
 
         this.context = context;
         this.enabledEffects = effects;
@@ -43,34 +41,112 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public static class EffectViewHolder {
-        Button removeBtn;
-        TextView effectName;
+    private static class ViewHolder {
+        public LinearLayout linearLayout;
+        public Button removeBtn;
+        public TextView effectName;
+        public boolean paramsMade = false;
     }
 
     @NonNull
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        final Effect effect = getItem(position);
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        if(convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.enabled_listview, parent, false);
-        }
 
-        TextView effectName = (TextView)convertView.findViewById(R.id.enabled_effect_name);
-        effectName.setText(effect.getDisplayName());
+        final Effect effect = enabledEffects.get(position);
+        EffectsDefaults.EffectDefaults[] effectParamaters = effect.getEffectParamNames();
 
-        Button removeEffectBtn = (Button)convertView.findViewById(R.id.removeEffect);
+        int latestId = 0;
+        TextView latestIdValue = new TextView(context);
+        latestIdValue.setVisibility(View.GONE);
+        latestIdValue.setId(latestId++);
+
+        TextView effectNameJSON = new TextView(context);
+        effectNameJSON.setText(effect.getJsonName());
+        effectNameJSON.setVisibility(View.GONE);
+        effectNameJSON.setId(latestId++);
+
+        Button removeEffectBtn = new Button(context);
+        removeEffectBtn.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        removeEffectBtn.setText("del");
         removeEffectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 remove(effect);
-                notifyDataSetChanged();
+//                notifyDataSetChanged();
             }
         });
 
-        return convertView;
+        TextView effectName = new TextView(context);
+        effectName.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        effectName.setText(effect.getDisplayName());
+
+        linearLayout.addView(removeEffectBtn);
+        linearLayout.addView(effectName);
+
+        linearLayout.addView(latestIdValue);
+        linearLayout.addView(effectNameJSON);
+
+        for (final EffectsDefaults.EffectDefaults parameter : effectParamaters) {
+
+            TextView parameterName = new TextView(context);
+            parameterName.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+            parameterName.setText(parameter.getName());
+
+            TextView parameterNameJSON = new TextView(context);
+            parameterNameJSON.setText(parameter.getJsonName());
+            parameterNameJSON.setVisibility(View.GONE);
+            parameterNameJSON.setId(latestId++);
+
+            SeekBar parameterSlider = new SeekBar(context);
+            parameterSlider.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+
+            int seekbarMax = 100;
+            int seekbarDefProgress = 0;
+            if(parameter.isComplex()) {
+                seekbarMax = ((EffectsDefaults.ComplexEffectDefaults)parameter).getMax();
+                seekbarDefProgress = ((EffectsDefaults.ComplexEffectDefaults)parameter).getDefaultValue();
+            } else {
+                seekbarMax = ((EffectsDefaults.SimpleEffectDefaults)parameter).getMax();
+                seekbarDefProgress = ((EffectsDefaults.SimpleEffectDefaults)parameter).getDefaultValue();
+            }
+
+            parameterSlider.setMax(seekbarMax);
+            parameterSlider.setProgress(seekbarDefProgress);
+
+            final TextView parameterSliderValue = new TextView(context);
+            parameterSliderValue.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+            parameterSliderValue.setText(clampSeekValues(seekbarDefProgress, parameter));
+            parameterSliderValue.setId(latestId++);
+
+            parameterSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    parameterSliderValue.setText(clampSeekValues(progress, parameter));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+
+            linearLayout.addView(parameterName);
+            linearLayout.addView(parameterNameJSON);
+            linearLayout.addView(parameterSlider);
+            linearLayout.addView(parameterSliderValue);
+        }
+
+        return linearLayout;
     }
 
     private String clampSeekValues(int progress, EffectsDefaults.EffectDefaults effectParam) {
