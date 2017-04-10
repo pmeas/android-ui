@@ -142,6 +142,8 @@ public class EffectsActivity extends AppCompatActivity
 
                 effectData.put("name", effectName);
 
+                System.out.println("VALUE OF NUMEFFECTS: " + numEffects);
+
                 for(int j = 2; j < Integer.parseInt(numEffects); j+=2) {
                     String paramName = ((TextView)effectsListViewItem.findViewById(j)).getText().toString();
                     float paramValue = Float.parseFloat(((TextView)effectsListViewItem.findViewById(j+1)).getText().toString());

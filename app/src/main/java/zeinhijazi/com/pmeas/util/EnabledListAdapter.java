@@ -60,6 +60,8 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         final Effect effect = enabledEffects.get(position);
         EffectsDefaults.EffectDefaults[] effectParamaters = effect.getEffectParamNames();
 
+        System.out.println("GETVIEW CALLED FOR EFFECTS: " + effect.getDisplayName());
+
         int latestId = 0;
         TextView latestIdValue = new TextView(context);
         latestIdValue.setVisibility(View.GONE);
@@ -97,7 +99,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             parameterName.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
             parameterName.setText(parameter.getName());
 
-            TextView parameterNameJSON = new TextView(context);
+            final TextView parameterNameJSON = new TextView(context);
             parameterNameJSON.setText(parameter.getJsonName());
             parameterNameJSON.setVisibility(View.GONE);
             parameterNameJSON.setId(latestId++);
@@ -120,13 +122,21 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
             final TextView parameterSliderValue = new TextView(context);
             parameterSliderValue.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
-            parameterSliderValue.setText(clampSeekValues(seekbarDefProgress, parameter));
+            float clampedValue = clampSeekValues(seekbarDefProgress, parameter);
+            if(effect.getParams().containsKey(parameter.getJsonName())) {
+                parameterSliderValue.setText(String.valueOf(effect.getParams().get(parameter.getJsonName())));
+            } else {
+                parameterSliderValue.setText(String.valueOf(clampedValue));
+                effect.insertParams(parameter.getJsonName(), clampedValue);
+            }
             parameterSliderValue.setId(latestId++);
 
             parameterSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    parameterSliderValue.setText(clampSeekValues(progress, parameter));
+                    float clampedValue = clampSeekValues(progress, parameter);
+                    parameterSliderValue.setText(String.valueOf(clampedValue));
+                    effect.insertParams(parameter.getJsonName(), clampedValue);
                 }
 
                 @Override
@@ -140,16 +150,20 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
                 }
             });
 
+
+
+
             linearLayout.addView(parameterName);
             linearLayout.addView(parameterNameJSON);
             linearLayout.addView(parameterSlider);
             linearLayout.addView(parameterSliderValue);
         }
 
+        latestIdValue.setText("" + latestId);
         return linearLayout;
     }
 
-    private String clampSeekValues(int progress, EffectsDefaults.EffectDefaults effectParam) {
+    private float clampSeekValues(int progress, EffectsDefaults.EffectDefaults effectParam) {
         int seekBarMin = 0;
         if(effectParam.isComplex()) {
             seekBarMin = ((EffectsDefaults.ComplexEffectDefaults)effectParam).getMin();
@@ -159,6 +173,6 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         }
         float clampedProgress = ((float)(progress + seekBarMin))/effectParam.getDivideFactor();
 
-        return String.valueOf(clampedProgress);
+        return clampedProgress;
     }
 }

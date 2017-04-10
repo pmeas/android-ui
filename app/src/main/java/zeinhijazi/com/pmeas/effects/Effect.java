@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 public class Effect {
     private EffectsDefaults.EffectTypes type;
-    private Map<String, ?> params = new HashMap<>();
+    private Map<String, Float> params = new HashMap<>();
     public Effect(EffectsDefaults.EffectTypes type) {
         this.type = type;
     }
@@ -50,25 +50,31 @@ public class Effect {
     {
         return params.keySet();
     }
+    public Map<String, Float> getParams() { return params; }
 
-    int getSimpleParam(String paramJsonName)
+    public float getSimpleParam(String paramJsonName)
         throws IllegalStateException
     {
         if(isComplex(type, paramJsonName)) {
             throw new IllegalStateException(type.displayName+" is a complex type");
         }
         else {
-            return (Integer) params.get(paramJsonName);
+            return (Float) params.get(paramJsonName);
         }
     }
 
-    Collection<Integer> getComplexParam(String paramJsonName)
-        throws IllegalStateException
-    {
-        if(isComplex(type, paramJsonName)) {
-            return (Collection<Integer>) params.get(paramJsonName);
-        } else {
-            throw new IllegalStateException(type.displayName+" is a simple type");
-        }
+    // TODO: We dont seem to need this anymore...
+//    Collection<Float> getComplexParam(String paramJsonName)
+//        throws IllegalStateException
+//    {
+//        if(isComplex(type, paramJsonName)) {
+//            return (Collection<Float>) params.get(paramJsonName);
+//        } else {
+//            throw new IllegalStateException(type.displayName+" is a simple type");
+//        }
+//    }
+
+    public void insertParams(String jsonName, float value) {
+        params.put(jsonName, value);
     }
 }
