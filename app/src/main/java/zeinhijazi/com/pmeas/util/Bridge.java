@@ -3,6 +3,7 @@ package zeinhijazi.com.pmeas.util;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Debug;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class Bridge extends AsyncTask<Void, Void, String>{
         udpSocket.send(sendPacket);
     }
 
+    @Nullable
     private InetAddress receiveMessage() throws IOException{
         byte[] receivedMessage = new byte[1024];
         DatagramPacket receivePacket = new DatagramPacket(receivedMessage, receivedMessage.length);
@@ -93,8 +95,5 @@ public class Bridge extends AsyncTask<Void, Void, String>{
 
         return (outputStream != null) && (inStream != null);
     }
-
-    // TODO: Move this to the effects activity to be able to change UI elements.
-
 
 }

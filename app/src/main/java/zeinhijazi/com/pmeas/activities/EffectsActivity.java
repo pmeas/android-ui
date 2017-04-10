@@ -3,18 +3,14 @@ package zeinhijazi.com.pmeas.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Debug;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 
 import zeinhijazi.com.pmeas.R;
 import zeinhijazi.com.pmeas.effects.Effect;
@@ -45,16 +33,10 @@ public class EffectsActivity extends AppCompatActivity
     EnabledListAdapter listAdapter;
     ArrayList<Effect> effects;
 
-    Bridge bridge;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_effects);
-
-        ArrayList<String> param = new ArrayList<>();
-        param.add("Feedback");
-        param.add("Slope");
 
         effects = new ArrayList<>();
 
@@ -81,11 +63,9 @@ public class EffectsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_send:
-//                Toast.makeText(this, "Send Button Selected", Toast.LENGTH_SHORT).show();
                 sendEffects();
                 return true;
             case R.id.action_add:
-                Toast.makeText(this, "Add Button Selected", Toast.LENGTH_SHORT).show();
                 final CharSequence effectsNames[] = new CharSequence[] {"Distortion", "Delay", "Reverb", "Chorus", "Frequency Shift", "Harmonizer", "Flanger", "Phaser"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Choose an Effect");
@@ -146,7 +126,7 @@ public class EffectsActivity extends AppCompatActivity
 
         try {
             JSONObject effectJSON = new JSONObject();
-            JSONObject effectData = new JSONObject();
+            JSONObject effectData;
 
             effectJSON.put("intent", "EFFECT");
 
@@ -162,6 +142,8 @@ public class EffectsActivity extends AppCompatActivity
 
                 effectData.put("name", effectName);
 
+                System.out.println("VALUE OF NUMEFFECTS: " + numEffects);
+
                 for(int j = 2; j < Integer.parseInt(numEffects); j+=2) {
                     String paramName = ((TextView)effectsListViewItem.findViewById(j)).getText().toString();
                     float paramValue = Float.parseFloat(((TextView)effectsListViewItem.findViewById(j+1)).getText().toString());
@@ -171,20 +153,18 @@ public class EffectsActivity extends AppCompatActivity
                 effectJSON.put(String.valueOf(i), effectData);
             }
 
-            System.out.println(effectJSON.toString());
             new BridgeAsync(this).execute(effectJSON.toString());
-
 
         } catch(JSONException e) {
             Log.e("JSON", "Json exception: " + e.getMessage());
         }
     }
 
-    public static class BridgeAsync extends AsyncTask<String, Void, String> {
+    private class BridgeAsync extends AsyncTask<String, Void, String> {
 
         Context context;
 
-        public BridgeAsync(Context context) {
+        BridgeAsync(Context context) {
             this.context = context;
         }
 
