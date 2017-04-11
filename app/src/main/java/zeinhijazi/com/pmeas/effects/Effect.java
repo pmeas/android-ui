@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 public class Effect {
     private EffectsDefaults.EffectTypes type;
     private Map<String, Float> params = new HashMap<>();
+    private Map<String, Integer> unclampedParams = new HashMap<>();
     public Effect(EffectsDefaults.EffectTypes type) {
         this.type = type;
     }
@@ -51,6 +52,7 @@ public class Effect {
         return params.keySet();
     }
     public Map<String, Float> getParams() { return params; }
+    public Map<String, Integer> getUnclampedParams() { return unclampedParams; }
 
     public float getSimpleParam(String paramJsonName)
         throws IllegalStateException
@@ -77,4 +79,5 @@ public class Effect {
     public void insertParams(String jsonName, float value) {
         params.put(jsonName, value);
     }
+    public void insertUnclampedParam(String jsonName, int value) { unclampedParams.put(jsonName, value); }
 }

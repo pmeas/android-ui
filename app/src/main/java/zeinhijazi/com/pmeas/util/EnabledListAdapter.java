@@ -2,6 +2,7 @@ package zeinhijazi.com.pmeas.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,23 +73,33 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         effectNameJSON.setVisibility(View.GONE);
         effectNameJSON.setId(latestId++);
 
+        RelativeLayout topBar = new RelativeLayout(context);
+        topBar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
         Button removeEffectBtn = new Button(context);
-        removeEffectBtn.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        removeEffectBtn.setLayoutParams(new RelativeLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)removeEffectBtn.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         removeEffectBtn.setText("del");
         removeEffectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 remove(effect);
-//                notifyDataSetChanged();
             }
         });
 
         TextView effectName = new TextView(context);
-        effectName.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        effectName.setLayoutParams(new RelativeLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
         effectName.setText(effect.getDisplayName());
+        effectName.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        linearLayout.addView(removeEffectBtn);
-        linearLayout.addView(effectName);
+        topBar.addView(effectName);
+        topBar.addView(removeEffectBtn);
+
+        linearLayout.addView(topBar);
+
+//        linearLayout.addView(removeEffectBtn);
+//        linearLayout.addView(effectName);
 
         linearLayout.addView(latestIdValue);
         linearLayout.addView(effectNameJSON);
@@ -96,8 +107,9 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         for (final EffectsDefaults.EffectDefaults parameter : effectParamaters) {
 
             TextView parameterName = new TextView(context);
-            parameterName.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+            parameterName.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
             parameterName.setText(parameter.getName());
+            parameterName.setGravity(Gravity.CENTER_HORIZONTAL);
 
             final TextView parameterNameJSON = new TextView(context);
             parameterNameJSON.setText(parameter.getJsonName());
@@ -121,13 +133,16 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             parameterSlider.setProgress(seekbarDefProgress);
 
             final TextView parameterSliderValue = new TextView(context);
-            parameterSliderValue.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+            parameterSliderValue.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+            parameterSliderValue.setGravity(Gravity.CENTER_HORIZONTAL);
             float clampedValue = clampSeekValues(seekbarDefProgress, parameter);
             if(effect.getParams().containsKey(parameter.getJsonName())) {
                 parameterSliderValue.setText(String.valueOf(effect.getParams().get(parameter.getJsonName())));
+                parameterSlider.setProgress(effect.getUnclampedParams().get(parameter.getJsonName()));
             } else {
                 parameterSliderValue.setText(String.valueOf(clampedValue));
                 effect.insertParams(parameter.getJsonName(), clampedValue);
+                effect.insertUnclampedParam(parameter.getJsonName(), seekbarDefProgress);
             }
             parameterSliderValue.setId(latestId++);
 
@@ -137,6 +152,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
                     float clampedValue = clampSeekValues(progress, parameter);
                     parameterSliderValue.setText(String.valueOf(clampedValue));
                     effect.insertParams(parameter.getJsonName(), clampedValue);
+                    effect.insertUnclampedParam(parameter.getJsonName(), progress);
                 }
 
                 @Override
@@ -149,9 +165,6 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
 
                 }
             });
-
-
-
 
             linearLayout.addView(parameterName);
             linearLayout.addView(parameterNameJSON);
