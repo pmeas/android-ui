@@ -80,7 +80,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         removeEffectBtn.setLayoutParams(new RelativeLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)removeEffectBtn.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        removeEffectBtn.setText("del");
+        removeEffectBtn.setText("X");
         removeEffectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
