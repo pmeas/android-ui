@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -76,11 +77,12 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         RelativeLayout topBar = new RelativeLayout(context);
         topBar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-        Button removeEffectBtn = new Button(context);
+        ImageView removeEffectBtn = new ImageView(context);
         removeEffectBtn.setLayoutParams(new RelativeLayout.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)removeEffectBtn.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        removeEffectBtn.setText("X");
+        layoutParams.setMargins(0, 0, 20, 0);
+        removeEffectBtn.setImageResource(R.drawable.ic_delete_forever_black_36dp);
         removeEffectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +91,10 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         });
 
         TextView effectName = new TextView(context);
-        effectName.setLayoutParams(new RelativeLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        effectName.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
         effectName.setText(effect.getDisplayName());
-        effectName.setGravity(Gravity.CENTER_HORIZONTAL);
+        effectName.setGravity(Gravity.CENTER);
+        effectName.setTextSize(24);
 
         topBar.addView(effectName);
         topBar.addView(removeEffectBtn);
@@ -184,8 +187,6 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
             seekBarMin = ((EffectsDefaults.SimpleEffectDefaults)effectParam).getMin();
 
         }
-        float clampedProgress = ((float)(progress + seekBarMin))/effectParam.getDivideFactor();
-
-        return clampedProgress;
+        return ((float)(progress + seekBarMin))/effectParam.getDivideFactor();
     }
 }
