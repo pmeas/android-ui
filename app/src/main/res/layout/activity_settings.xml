@@ -11,7 +11,8 @@
         android:id="@+id/inportText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Capture Port"/>
+        android:text="Capture Port"
+        android:textSize="18sp"/>
 
     <Spinner
         android:id="@+id/inportsSpinner"
@@ -24,7 +25,8 @@
         android:id="@+id/outportText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Playback Port"/>
+        android:text="Playback Port"
+        android:textSize="18sp"/>
 
     <Spinner
         android:id="@+id/outputsSpinner"

@@ -82,7 +82,7 @@ public class EnabledListAdapter extends ArrayAdapter<Effect> {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)removeEffectBtn.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParams.setMargins(0, 0, 20, 0);
-        removeEffectBtn.setImageResource(R.drawable.ic_delete_forever_black_36dp);
+        removeEffectBtn.setImageResource(R.drawable.ic_delete_forever_white_36dp);
         removeEffectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
