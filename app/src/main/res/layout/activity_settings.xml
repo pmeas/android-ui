@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="zeinhijazi.com.pmeas.activities.SettingsActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/inportText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capture Port"/>
+
+    <Spinner
+        android:id="@+id/inportsSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:popupBackground="@color/colorPrimary">
+    </Spinner>
+
+    <TextView
+        android:id="@+id/outportText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Playback Port"/>
+
+    <Spinner
+        android:id="@+id/outputsSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:popupBackground="@color/colorPrimary">
+    </Spinner>
+
+    <Button
+        android:id="@+id/button_sendports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Ports"
+        android:onClick="sendPorts"/>
+
+</LinearLayout>
