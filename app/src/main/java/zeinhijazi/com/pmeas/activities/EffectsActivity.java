@@ -2,6 +2,7 @@ package zeinhijazi.com.pmeas.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -117,6 +118,9 @@ public class EffectsActivity extends AppCompatActivity
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
                 return true;
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }

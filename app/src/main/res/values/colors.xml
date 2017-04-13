@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#494444</color>
+    <color name="colorPrimaryDark">#282525</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="PMEASGray">#332f2f</color>
+    <color name="PMEASText">#f1f1f1</color>
+    <color name="regularText">#FFFFFF</color>
 </resources>
