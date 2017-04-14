@@ -1,11 +1,8 @@
 package zeinhijazi.com.pmeas.util;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -25,12 +22,17 @@ import java.net.SocketTimeoutException;
 // TODO: Perform this at some start screen then making tcpSocket/streams public static so others can access them.
 public class Bridge extends AsyncTask<Void, Void, String>{
 
+    // UDP socket used for the Service Discovery protocol.
     private DatagramSocket udpSocket;
+
+    // TCP socket used in the service discovery protocol.
     private Socket tcpSocket;
 
+    // PORT to listen on and the respective address to connect to (by default BROADCAST)
     private final int PORT = 10000;
     private final String ADDR = "255.255.255.255";
 
+    // THe input and output streams used to communicate with the modulation application.
     public static DataOutputStream outputStream;
     public static BufferedReader inStream;
 
@@ -45,15 +47,21 @@ public class Bridge extends AsyncTask<Void, Void, String>{
 
         String result = "FAIL";
 
+        // Begin with the establishment of the connection protocol.
         try {
+            // Send the UDP broadcast to retrieve the address to connect to.
             broadcastMessage();
 
+            // Get the message the modulation application sent.
             InetAddress tcpAddr = receiveMessage();
+
+            // Verify the message is not not and if it is, it is indicating a socket timeout.
             if(tcpAddr == null) {
                 System.out.println("Socket Timed Out");
                 return result;
             }
 
+            // If the resulting communication is valid, connect tothe address through a TCP based communication.
             if( connectTCP(tcpAddr, 10001) ) {
                 result = "Success";
             }
@@ -66,6 +74,12 @@ public class Bridge extends AsyncTask<Void, Void, String>{
         return result;
     }
 
+    /**
+     * Broadcasts a UDP message to the modulation application to show intent to initiate the connection.
+     *
+     * @throws SocketException
+     * @throws IOException
+     */
     private void broadcastMessage() throws SocketException, IOException {
 
         byte[] broadcastMessage = "1".getBytes();
@@ -74,6 +88,13 @@ public class Bridge extends AsyncTask<Void, Void, String>{
         udpSocket.send(sendPacket);
     }
 
+    /**
+     * Get the UDP message transmitted back by the modulation application. Use that information to
+     * connect to the backend application.
+     *
+     * @return The address of the TCP socket to connect to.
+     * @throws IOException
+     */
     @Nullable
     private InetAddress receiveMessage() throws IOException{
         byte[] receivedMessage = new byte[1024];
@@ -88,6 +109,15 @@ public class Bridge extends AsyncTask<Void, Void, String>{
         return receivePacket.getAddress();
     }
 
+    /**
+     * Establish the TCP connection to the modulation application. With this connection, the user
+     * can now send messages to and from the modulation application freely.
+     *
+     * @param addr The address of the TCP server to connect to.
+     * @param port The port of the TCP server to connect to.
+     * @return True if the message is successful.
+     * @throws IOException
+     */
     private boolean connectTCP(InetAddress addr, int port) throws IOException {
         tcpSocket = new Socket(addr, port);
         outputStream = new DataOutputStream(tcpSocket.getOutputStream());
