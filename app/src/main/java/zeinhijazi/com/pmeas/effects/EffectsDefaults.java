@@ -5,6 +5,7 @@ package zeinhijazi.com.pmeas.effects;
  */
 
 public class EffectsDefaults {
+    /** Encapsulates the default values of an effect */
     public static abstract class EffectDefaults
     {
         final String name;
@@ -36,6 +37,7 @@ public class EffectsDefaults {
             return this.divideFactor;
         }
     }
+    /** This is the class used for "simple" params which do not have additional "tracks". A simple param is simply an int value.*/
     public static class SimpleEffectDefaults
             extends EffectDefaults
     {
@@ -60,6 +62,10 @@ public class EffectsDefaults {
             return this.defaultValue;
         }
     }
+    /** Although this is structurally identical to SimpleEffectDefaults, it's semantically different.
+     *  The min and max and default are shared between all complex param values.
+     *  A complex effect is zero-or-more int values, each of which is subject to the same constraints.
+     */
     public static class ComplexEffectDefaults
             extends EffectDefaults
     {
@@ -84,6 +90,7 @@ public class EffectsDefaults {
             return this.defaultValue;
         }
     }
+    /** These are the effects we have and their values. */
     public static enum EffectTypes {
         CHORUS("Chorus", "chorus",
                 new SimpleEffectDefaults("Balance", "balance",
