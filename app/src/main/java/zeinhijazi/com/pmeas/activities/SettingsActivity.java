@@ -128,6 +128,8 @@ public class SettingsActivity extends AppCompatActivity {
             this.updatePorts = updatePorts;
         }
 
+        /** As you may have suspected, this is the code that gets run in the background of the task.
+         */
         @Override
         protected String doInBackground(String... params) {
             String message = params[0];
