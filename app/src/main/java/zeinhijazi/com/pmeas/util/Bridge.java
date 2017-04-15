@@ -1,8 +1,13 @@
 package zeinhijazi.com.pmeas.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -22,6 +27,9 @@ import java.net.SocketTimeoutException;
 // TODO: Perform this at some start screen then making tcpSocket/streams public static so others can access them.
 public class Bridge extends AsyncTask<Void, Void, String>{
 
+    Context context;
+    Activity activity;
+
     // UDP socket used for the Service Discovery protocol.
     private DatagramSocket udpSocket;
 
@@ -36,7 +44,9 @@ public class Bridge extends AsyncTask<Void, Void, String>{
     public static DataOutputStream outputStream;
     public static BufferedReader inStream;
 
-    public Bridge() throws IOException {
+    public Bridge(Context context, Activity activity) throws IOException {
+        this.context = context;
+        this.activity = activity;
         udpSocket = new DatagramSocket();
         udpSocket.setBroadcast(true);
         udpSocket.setSoTimeout(5000);
@@ -72,6 +82,36 @@ public class Bridge extends AsyncTask<Void, Void, String>{
         }
 
         return result;
+    }
+
+    /**
+     * Decides what happens based on the result of the doInBackground() method.
+     *
+     * @param result The result of the call from doInBackground().
+     */
+    @Override
+    protected void onPostExecute(String result) {
+        if(result.equals("FAIL")) {
+            // If the sending was unsuccesful, print an error to the user.
+//            Toast.makeText(context, "Connection could not be established.", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Could not connect to server. Try again")
+                    .setCancelable(false)
+                    .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.out.println("Clicked retry button");
+                            activity.recreate();
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        } else {
+            // If the sending is unsuccesful, print a success message to the user.
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
