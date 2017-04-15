@@ -27,7 +27,6 @@ import java.net.SocketTimeoutException;
 // TODO: Perform this at some start screen then making tcpSocket/streams public static so others can access them.
 public class Bridge extends AsyncTask<Void, Void, String>{
 
-    Context context;
     Activity activity;
 
     // UDP socket used for the Service Discovery protocol.
@@ -44,8 +43,7 @@ public class Bridge extends AsyncTask<Void, Void, String>{
     public static DataOutputStream outputStream;
     public static BufferedReader inStream;
 
-    public Bridge(Context context, Activity activity) throws IOException {
-        this.context = context;
+    public Bridge(Activity activity) throws IOException {
         this.activity = activity;
         udpSocket = new DatagramSocket();
         udpSocket.setBroadcast(true);
@@ -94,7 +92,7 @@ public class Bridge extends AsyncTask<Void, Void, String>{
         if(result.equals("FAIL")) {
             // If the sending was unsuccesful, print an error to the user.
 //            Toast.makeText(context, "Connection could not be established.", Toast.LENGTH_SHORT).show();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage("Could not connect to server. Try again")
                     .setCancelable(false)
                     .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
@@ -110,7 +108,7 @@ public class Bridge extends AsyncTask<Void, Void, String>{
 
         } else {
             // If the sending is unsuccesful, print a success message to the user.
-            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
         }
     }
 
