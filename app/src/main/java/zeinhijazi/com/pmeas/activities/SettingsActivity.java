@@ -92,12 +92,19 @@ public class SettingsActivity extends AppCompatActivity {
             JSONObject selectedPorts = new JSONObject();
             selectedPorts.put("intent", "UPDATEPORT");
 
-            String selectedCapture = inSpinner.getSelectedItem().toString();
-            String selectedPlayback = outSpinner.getSelectedItem().toString();
-            selectedPorts.put("in", selectedCapture);
-            selectedPorts.put("out", selectedPlayback);
+            // Only send the new ports if there are actually ports in our list (else its empty and nothing is there to send)
+            if (inputPorts.size() > 0 && outputPorts.size() > 0) {
+                String selectedCapture = inSpinner.getSelectedItem().toString();
+                String selectedPlayback = outSpinner.getSelectedItem().toString();
 
-            new BridgeAsync(this, true).execute(selectedPorts.toString());
+
+                // Format the ports into JSON and then send them off to be updated.
+                selectedPorts.put("in", selectedCapture);
+                selectedPorts.put("out", selectedPlayback);
+
+
+                new BridgeAsync(this, true).execute(selectedPorts.toString());
+            }
         } catch (JSONException e) {
             Log.e("JSON", "Json exception: " + e.getMessage());
         }
