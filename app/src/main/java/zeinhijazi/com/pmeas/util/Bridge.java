@@ -43,6 +43,8 @@ public class Bridge extends AsyncTask<Void, Void, String>{
     public static DataOutputStream outputStream;
     public static BufferedReader inStream;
 
+    public static boolean isConnected = false;
+
     public Bridge(Activity activity) throws IOException {
         this.activity = activity;
         udpSocket = new DatagramSocket();
@@ -72,6 +74,7 @@ public class Bridge extends AsyncTask<Void, Void, String>{
             // If the resulting communication is valid, connect tothe address through a TCP based communication.
             if( connectTCP(tcpAddr, 10001) ) {
                 result = "Success";
+                isConnected = true;
             }
         } catch (SocketException e) {
             Log.e("EffectsActivity", "SocketException caught: " + e.getMessage());
@@ -107,7 +110,7 @@ public class Bridge extends AsyncTask<Void, Void, String>{
             dialog.show();
 
         } else {
-            // If the sending is unsuccesful, print a success message to the user.
+            // If the sending is succesful, print a success message to the user.
             Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
         }
     }

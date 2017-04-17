@@ -105,7 +105,7 @@ public class EffectsDefaults {
                 new SimpleEffectDefaults("Feedback", "feedback",
                         0, 100, 50, 100),
                 new ComplexEffectDefaults("Delay Time (ms)", "delay",
-                        0, 1000, 50, 100)),
+                        0, 500, 50, 100)),
         DISTORTION("Distortion", "distortion",
                 new SimpleEffectDefaults("Balance", "drive",
                         0, 100, 50, 100),
@@ -120,7 +120,7 @@ public class EffectsDefaults {
                         0, 100, 0, 100)),
         FREQUENCY_SHIFT("Frequency Shift", "freqshift",
                 new ComplexEffectDefaults("Shift", "shift",
-                        0, 500, 0, 1)),
+                        0, 1000, 0, 1)),
         HARMONIZER("Harmonizer", "harmonizer",
                 new SimpleEffectDefaults("Feedback", "feedback",
                         0, 100, 50, 100),
@@ -143,7 +143,7 @@ public class EffectsDefaults {
                 new SimpleEffectDefaults("Tone", "cutoff",
                         0, 35000, 3500, 1),
                 new SimpleEffectDefaults("Delay", "revtime",
-                        0, 100, 0, 100),
+                        0, 1000, 0, 100),
                 new SimpleEffectDefaults("Room Size", "roomsize",
                         25, 375, 50, 100));
 

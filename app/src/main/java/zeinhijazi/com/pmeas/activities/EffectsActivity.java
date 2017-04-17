@@ -68,7 +68,9 @@ public class EffectsActivity extends AppCompatActivity
 
         // Run the bridge code to establish the connection to the modulation application.
         try {
-            new Bridge(this).execute();
+            if(!Bridge.isConnected) {
+                new Bridge(this).execute();
+            }
         } catch (IOException e) {
             Log.e("Effects Activity", "IO Exception creating bridge: " + e.getMessage());
         }
