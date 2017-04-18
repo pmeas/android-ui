@@ -12,7 +12,7 @@ At present the following functionality is supported by the Android application:
 * Changing the playback and capture ports for the backend to use.
 
 ## Installation
-To directly download the application, simply navigate to this website from an Android mobile device and click [this link](linkhere) to download the device. Make sure you enabled the `Download from Unknown Sources` setting in the Settings Menu.
+To directly download the application, simply navigate to this website from an Android mobile device and click [this link](app/app-release.apk "Link to APK") to download the device. Make sure you enabled the `Download from Unknown Sources` setting in the Settings Menu.
 
 To compile the project yourself,
 1. Donwload and Install [Android Studio](https://developer.android.com/studio/index.html "Android Studio Homepage").
