@@ -18,3 +18,8 @@ To compile the project yourself,
 1. Download and Install [Android Studio](https://developer.android.com/studio/index.html "Android Studio Homepage").
 2. Clone this repository to a local directory on your machine.
 3. Open Android Studio and open the directory where you have cloned this repository.
+4. Wait for the project to load and index all necessary elements.
+5. Plug in the Android phone to your computer running Android Studio.
+6. Press the Green play button labelled `Run App` to begin downloading the application to the phone.
+
+> Make sure your Android phone has [Developer Options Enabled](http://www.androidcentral.com/all-about-your-phones-developer-options "How to enabled Developer Options") and USB Debugging (in the Developer Options in `Settings`) is enabled if you are compiling from source.
