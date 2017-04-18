@@ -199,11 +199,13 @@ public class EffectsActivity extends AppCompatActivity
                 // Get a new item in the listview corresponding to an enabled effect.
                 effectsListViewItem = effectsListView.getChildAt(i);
 
+                int effectId = 1;
+
                 // Acquire all data about the selected effect and add them to our JSON structure.
                 String numEffects = ((TextView)effectsListViewItem.findViewById(0)).getText().toString();
                 /* Don't try to fix this line. It's not an actual error but a lint error because you
                 technically shouldn't do this but our view is dynamically added so you have to. */
-                String effectName = ((TextView)effectsListViewItem.findViewById(R.id.effectNameId)).getText().toString();
+                String effectName = ((TextView)effectsListViewItem.findViewById(effectId)).getText().toString();
 
                 effectData.put("name", effectName);
 
