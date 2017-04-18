@@ -15,6 +15,6 @@ At present the following functionality is supported by the Android application:
 To directly download the application, simply navigate to this website from an Android mobile device and click [this link](app/app-release.apk "Link to APK") to download the device. Make sure you enabled the `Download from Unknown Sources` setting in the Settings Menu.
 
 To compile the project yourself,
-1. Donwload and Install [Android Studio](https://developer.android.com/studio/index.html "Android Studio Homepage").
+1. Download and Install [Android Studio](https://developer.android.com/studio/index.html "Android Studio Homepage").
 2. Clone this repository to a local directory on your machine.
 3. Open Android Studio and open the directory where you have cloned this repository.
