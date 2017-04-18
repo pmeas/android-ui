@@ -203,7 +203,7 @@ public class EffectsActivity extends AppCompatActivity
                 String numEffects = ((TextView)effectsListViewItem.findViewById(0)).getText().toString();
                 /* Don't try to fix this line. It's not an actual error but a lint error because you
                 technically shouldn't do this but our view is dynamically added so you have to. */
-                String effectName = ((TextView)effectsListViewItem.findViewById(1)).getText().toString();
+                String effectName = ((TextView)effectsListViewItem.findViewById(R.id.effectNameId)).getText().toString();
 
                 effectData.put("name", effectName);
 
