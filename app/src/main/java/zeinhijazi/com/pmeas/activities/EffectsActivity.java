@@ -110,7 +110,7 @@ public class EffectsActivity extends AppCompatActivity
                  */
 
                 // The list of effects to choose from.
-                final CharSequence effectsNames[] = new CharSequence[] {"Distortion", "Delay", "Reverb", "Chorus", "Frequency Shift", "Harmonizer", "Flanger", "Phaser"};
+                final CharSequence effectsNames[] = new CharSequence[] {"Distortion", "Delay", "Reverb", "Chorus", "Frequency Shift", "Harmonizer", "Flanger"};
 
                 // AlertDialogs are OS-level windows that open up that allow the user to interact with them
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -150,10 +150,6 @@ public class EffectsActivity extends AppCompatActivity
                             case 6:
                                 // stuff
                                 effects.add(new Effect(EffectsDefaults.EffectTypes.FLANGER));
-                                break;
-                            case 7:
-                                // stuff
-                                effects.add(new Effect(EffectsDefaults.EffectTypes.PHASER));
                                 break;
                             default:
                                 break;
